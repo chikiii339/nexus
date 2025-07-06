@@ -2,12 +2,13 @@
 
 NODE_FILE="nodes.txt"
 SLEEP_DELAY=2  # Delay between screen launches
+THREAD_LIMIT=1
 
-# Read node IDs into array
+# Read all node IDs into array
 readarray -t NODE_IDS < "$NODE_FILE"
 
 TOTAL=${#NODE_IDS[@]}
-echo "🚀 Launching $TOTAL node screens..."
+echo "🚀 Launching $TOTAL node screens with --max-threads $THREAD_LIMIT..."
 
 for i in "${!NODE_IDS[@]}"; do
   NODE_ID="${NODE_IDS[$i]}"
@@ -15,7 +16,7 @@ for i in "${!NODE_IDS[@]}"; do
 
   echo "[*] Launching $SCREEN_NAME for node ID $NODE_ID"
 
-  screen -dmS "$SCREEN_NAME" bash -c "nexus-network start --node-id $NODE_ID"
+  screen -dmS "$SCREEN_NAME" bash -c "nexus-network start --node-id $NODE_ID --max-threads $THREAD_LIMIT"
   sleep "$SLEEP_DELAY"
 done
 
